@@ -1,0 +1,200 @@
+[
+  {
+    "slug": "cunape-tradicional",
+    "nome": "Cuñapé Tradicional",
+    "descricao": "Biscoito boliviano de queijo e amido de mandioca, crocante por fora e macio por dentro. Assado em pequenos lotes seguindo receita tradicional.",
+    "ingredientes": ["Amido de mandioca (yuca)", "Queijo", "Ovos", "Leite", "Manteiga", "Sal"],
+    "categoria": "alimentos",
+    "subcategoria": "cunapes-biscoitos",
+    "peso": "250g",
+    "precoUnitario": 24.9,
+    "imagens": []
+  },
+  {
+    "slug": "cunape-mini-pacote",
+    "nome": "Cuñapé Mini (pacote)",
+    "descricao": "Versão individual dos cuñapés, ideal para lanches e revenda em pequenas porções.",
+    "ingredientes": ["Amido de mandioca (yuca)", "Queijo", "Ovos", "Leite", "Manteiga", "Sal"],
+    "categoria": "alimentos",
+    "subcategoria": "cunapes-biscoitos",
+    "peso": "100g",
+    "precoUnitario": 14.9,
+    "imagens": []
+  },
+  {
+    "slug": "farinha-de-milho-boliviana",
+    "nome": "Harina de Maíz",
+    "descricao": "Farinha de milho boliviana, base para tortillas, humintas e pratos típicos da culinária andina.",
+    "categoria": "alimentos",
+    "subcategoria": "milho",
+    "peso": "1kg",
+    "precoUnitario": 18.5,
+    "imagens": []
+  },
+  {
+    "slug": "milho-pelado-boliviano",
+    "nome": "Maíz Pelado",
+    "descricao": "Milho pelado boliviano, tradicionalmente usado em sopas e no preparo do mote andino.",
+    "categoria": "alimentos",
+    "subcategoria": "milho",
+    "peso": "500g",
+    "precoUnitario": null,
+    "imagens": []
+  },
+  {
+    "slug": "arroz-integral-boliviano",
+    "nome": "Arroz Integral Boliviano",
+    "descricao": "Arroz integral de grão longo, cultivado nas terras baixas da Bolívia.",
+    "categoria": "alimentos",
+    "subcategoria": "arroz",
+    "peso": "1kg",
+    "precoUnitario": 16.9,
+    "imagens": []
+  },
+  {
+    "slug": "dulce-de-leche-boliviano",
+    "nome": "Dulce de Leche Artesanal",
+    "descricao": "Doce de leite artesanal boliviano, textura cremosa e ponto tradicional de confeitaria andina.",
+    "ingredientes": ["Leite", "Açúcar", "Bicarbonato de sódio"],
+    "categoria": "alimentos",
+    "subcategoria": "doce",
+    "peso": "400g",
+    "precoUnitario": 22.0,
+    "imagens": []
+  },
+  {
+    "slug": "vino-tinto-altura",
+    "nome": "Vino Tinto de Altura",
+    "descricao": "Vinho tinto produzido em vinhedos de altitude na Bolívia, perfil encorpado e frutado.",
+    "categoria": "bebidas",
+    "subcategoria": "vinhos",
+    "peso": "750ml",
+    "precoUnitario": 89.9,
+    "imagens": []
+  },
+  {
+    "slug": "singani-tradicional",
+    "nome": "Singani Tradicional",
+    "descricao": "Destilado boliviano de uva moscatel, produzido nos vales de altitude. Item típico das celebrações do país.",
+    "categoria": "bebidas",
+    "subcategoria": "fermentados",
+    "peso": "700ml",
+    "precoUnitario": null,
+    "imagens": []
+  },
+  {
+    "slug": "cerveja-artesanal-andina",
+    "nome": "Cerveja Artesanal Andina",
+    "descricao": "Cerveja artesanal boliviana de produção em pequena escala, estilo lager.",
+    "categoria": "bebidas",
+    "subcategoria": "cervejas-artesanais",
+    "peso": "355ml",
+    "precoUnitario": 19.9,
+    "imagens": []
+  },
+  {
+    "slug": "espumante-brut-boliviano",
+    "nome": "Espumante Brut",
+    "descricao": "Espumante boliviano método tradicional, indicado para brindes e ocasiões especiais.",
+    "categoria": "bebidas",
+    "subcategoria": "espumantes",
+    "peso": "750ml",
+    "precoUnitario": 99.9,
+    "imagens": []
+  },
+  {
+    "slug": "oleo-de-girassol-boliviano",
+    "nome": "Óleo de Girassol Boliviano",
+    "descricao": "Óleo vegetal de girassol prensado, uso culinário, produção boliviana.",
+    "categoria": "vegetais-graos-oleos",
+    "subcategoria": "oleos-diversos",
+    "peso": "900ml",
+    "precoUnitario": 12.9,
+    "imagens": []
+  },
+  {
+    "slug": "oleo-industrial-vegetal",
+    "nome": "Óleo Vegetal Industrial",
+    "descricao": "Óleo vegetal para uso industrial em fritadeiras e produção de alimentos em maior escala.",
+    "categoria": "vegetais-graos-oleos",
+    "subcategoria": "oleos-diversos",
+    "peso": "20L",
+    "precoUnitario": null,
+    "imagens": []
+  },
+  {
+    "slug": "sobretudo-alpaca-natural",
+    "nome": "Sobretudo de Lã de Alpaca",
+    "descricao": "Sobretudo tecido em lã de alpaca boliviana, leve e de alto poder térmico.",
+    "categoria": "vestuario",
+    "subcategoria": "la-de-alpaca",
+    "precoUnitario": 459.0,
+    "imagens": [],
+    "variacoes": [
+      { "tipo": "cor", "opcoes": ["Natural", "Cinza", "Marrom"] },
+      { "tipo": "tamanho", "opcoes": ["P", "M", "G", "GG"] }
+    ]
+  },
+  {
+    "slug": "blusa-alpaca-gola-alta",
+    "nome": "Blusa de Alpaca Gola Alta",
+    "descricao": "Blusa de lã de alpaca com gola alta, ideal para o inverno.",
+    "categoria": "vestuario",
+    "subcategoria": "la-de-alpaca",
+    "precoUnitario": 219.0,
+    "imagens": [],
+    "variacoes": [
+      { "tipo": "cor", "opcoes": ["Natural", "Vinho", "Preto"] },
+      { "tipo": "tamanho", "opcoes": ["P", "M", "G"] }
+    ]
+  },
+  {
+    "slug": "cardiga-alpaca-trancado",
+    "nome": "Cardigã de Alpaca Trançado",
+    "descricao": "Cardigã em ponto trançado, 100% lã de alpaca boliviana.",
+    "categoria": "vestuario",
+    "subcategoria": "la-de-alpaca",
+    "precoUnitario": 289.0,
+    "imagens": [],
+    "variacoes": [
+      { "tipo": "cor", "opcoes": ["Natural", "Cinza"] },
+      { "tipo": "tamanho", "opcoes": ["P", "M", "G", "GG"] }
+    ]
+  },
+  {
+    "slug": "mel-silvestre-nativo",
+    "nome": "Mel Silvestre Nativo",
+    "descricao": "Mel puro de abelhas nativas, colhido em regiões preservadas da Bolívia.",
+    "categoria": "meis-de-abelhas-nativa",
+    "peso": "500g",
+    "precoUnitario": 34.9,
+    "imagens": []
+  },
+  {
+    "slug": "mel-de-abelha-jatai",
+    "nome": "Mel de Abelha Jataí",
+    "descricao": "Mel de abelha nativa sem ferrão, sabor suave e produção em pequena escala.",
+    "categoria": "meis-de-abelhas-nativa",
+    "peso": "250g",
+    "precoUnitario": null,
+    "imagens": []
+  },
+  {
+    "slug": "horneado-queijo-tradicional",
+    "nome": "Horneado Único Tradicional",
+    "descricao": "Pão de queijo boliviano artesanal, receita de família assada à base de queijo e amido de yuca.",
+    "categoria": "horneados-unicos",
+    "peso": "300g",
+    "precoUnitario": 26.9,
+    "imagens": []
+  },
+  {
+    "slug": "horneado-queijo-mini",
+    "nome": "Horneado Único Mini",
+    "descricao": "Versão individual dos Horneados Únicos, prática para consumo e revenda.",
+    "categoria": "horneados-unicos",
+    "peso": "120g",
+    "precoUnitario": 15.9,
+    "imagens": []
+  }
+]
