@@ -22,7 +22,7 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-dourado/30 bg-creme/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <Link href="/" className="flex items-center gap-2">
-          <Logo className="h-10 w-10" />
+          <Logo className="h-10 w-10" priority />
           <span className="font-display text-lg text-vinho leading-none">
             América Nativa
           </span>

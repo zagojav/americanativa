@@ -35,7 +35,7 @@ export function Footer() {
             <li><Link href="/produtos" className="hover:text-dourado">Todos os produtos</Link></li>
             <li><Link href="/produtos/bebidas" className="hover:text-dourado">Bebidas</Link></li>
             <li><Link href="/produtos/vestuario" className="hover:text-dourado">Vestuário</Link></li>
-            <li><Link href="/produtos/meis-de-abelhas-nativa" className="hover:text-dourado">Méis de Abelhas Nativa</Link></li>
+            <li><Link href="/produtos/meis-de-abelhas-nativas" className="hover:text-dourado">Méis de Abelhas Nativas</Link></li>
           </ul>
         </div>
 

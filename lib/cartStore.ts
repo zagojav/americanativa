@@ -41,9 +41,12 @@ export function getSnapshot(): CartItem[] {
 
 // Snapshot estável usado durante a renderização no servidor (e na primeira
 // hidratação no cliente) para evitar mismatch — o valor real do localStorage
-// é aplicado logo em seguida via useSyncExternalStore.
+// é aplicado logo em seguida via useSyncExternalStore. Precisa ser sempre a
+// mesma referência (não um array literal novo a cada chamada), senão o React
+// avisa "getServerSnapshot should be cached" e pode entrar em loop.
+const SNAPSHOT_VAZIO: CartItem[] = [];
 export function getServerSnapshot(): CartItem[] {
-  return [];
+  return SNAPSHOT_VAZIO;
 }
 
 export function adicionarItem(item: Omit<CartItem, "quantidade">, quantidade = 1) {

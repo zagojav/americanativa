@@ -2,54 +2,67 @@ import Link from "next/link";
 import { getCategoriasComContagem } from "@/lib/produtos";
 import { CategoryCard } from "@/components/CategoryCard";
 import { PlaceholderImage } from "@/components/PlaceholderImage";
-import { siteConfig } from "@/lib/site-config";
+import { BannerCarousel, type BannerSlide } from "@/components/BannerCarousel";
+import { BrandMotif } from "@/components/BrandMotif";
+
+const banners: BannerSlide[] = [
+  {
+    desktopSrc: "/images/banners/01-quem-somos-desktop.png",
+    mobileSrc: "/images/banners/01-quem-somos-mobile.png",
+    alt: "América Nativa — o melhor da América do Sul, até você",
+    href: "/quem-somos",
+  },
+  {
+    desktopSrc: "/images/banners/02-institucional-desktop.png",
+    mobileSrc: "/images/banners/02-institucional-mobile.png",
+    alt: "América Nativa LTDA — Importação, Exportação e Franquia",
+  },
+  {
+    desktopSrc: "/images/banners/03-horneados-desktop.png",
+    mobileSrc: "/images/banners/03-horneados-mobile.png",
+    alt: "Sabores únicos da Bolívia",
+    href: "/distribuicao/horneados-unicos",
+  },
+  {
+    desktopSrc: "/images/banners/04-produtos-desktop.png",
+    mobileSrc: "/images/banners/04-produtos-mobile.png",
+    alt: "Tesouros da Bolívia — vestuário e produtos autênticos",
+    href: "/produtos",
+  },
+  {
+    desktopSrc: "/images/banners/05-franquia-desktop.png",
+    mobileSrc: "/images/banners/05-franquia-mobile.png",
+    alt: "Seja um franqueado América Nativa",
+    href: "/franquia",
+  },
+];
 
 export default function Home() {
   const categorias = getCategoriasComContagem();
 
   return (
     <div className="flex flex-col">
-      {/* Hero */}
-      <section className="relative flex min-h-[70vh] items-center overflow-hidden bg-vinho">
-        <PlaceholderImage
-          label="banner institucional"
-          className="absolute inset-0 h-full w-full opacity-30"
-        />
-        <div className="relative z-10 mx-auto max-w-3xl px-4 text-center text-creme">
-          <p className="mb-3 text-sm uppercase tracking-[0.2em] text-dourado">
-            {siteConfig.tagline}
-          </p>
-          <h1 className="font-display text-4xl leading-tight sm:text-5xl">
-            {siteConfig.nomeMarca}
-          </h1>
-          <p className="mx-auto mt-4 max-w-xl text-creme/80">
-            {siteConfig.descricaoCurta}
-          </p>
-          <Link
-            href="/produtos"
-            className="mt-8 inline-block rounded-md bg-dourado px-8 py-3 font-medium text-vinho transition-colors hover:bg-creme"
-          >
-            Ver produtos
-          </Link>
-        </div>
-      </section>
+      <BannerCarousel slides={banners} />
 
       {/* O que importamos */}
-      <section className="mx-auto w-full max-w-6xl px-4 py-16">
-        <h2 className="font-display text-3xl text-vinho">O que importamos</h2>
-        <p className="mt-2 max-w-2xl text-vinho/70">
-          Da Bolívia direto para o Brasil: uma curadoria de alimentos, bebidas
-          e vestuário selecionados na origem.
-        </p>
-        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {categorias.map((c) => (
-            <CategoryCard
-              key={c.slug}
-              slug={c.slug}
-              label={c.label}
-              totalProdutos={c.totalProdutos}
-            />
-          ))}
+      <section className="relative overflow-hidden">
+        <BrandMotif />
+        <div className="relative mx-auto w-full max-w-6xl px-4 py-16">
+          <h2 className="font-display text-3xl text-vinho">O que importamos</h2>
+          <p className="mt-2 max-w-2xl text-vinho/70">
+            Da Bolívia direto para o Brasil: uma curadoria de alimentos, bebidas
+            e vestuário selecionados na origem.
+          </p>
+          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {categorias.map((c) => (
+              <CategoryCard
+                key={c.slug}
+                slug={c.slug}
+                label={c.label}
+                totalProdutos={c.totalProdutos}
+              />
+            ))}
+          </div>
         </div>
       </section>
 

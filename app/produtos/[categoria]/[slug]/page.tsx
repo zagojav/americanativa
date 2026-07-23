@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getProduto, getTodosProdutos } from "@/lib/produtos";
 import { PlaceholderImage } from "@/components/PlaceholderImage";
@@ -37,7 +38,19 @@ export default async function ProdutoPage({
   return (
     <div className="mx-auto max-w-5xl px-4 py-16">
       <div className="grid gap-10 sm:grid-cols-2">
-        <PlaceholderImage label={produto.nome} className="aspect-square w-full rounded-lg" />
+        {produto.imagens[0] ? (
+          <div className="relative aspect-square w-full overflow-hidden rounded-lg">
+            <Image
+              src={produto.imagens[0]}
+              alt={produto.nome}
+              fill
+              sizes="(min-width: 640px) 50vw, 100vw"
+              className="object-cover"
+            />
+          </div>
+        ) : (
+          <PlaceholderImage label={produto.nome} className="aspect-square w-full rounded-lg" />
+        )}
 
         <div>
           <h1 className="font-display text-3xl text-vinho">{produto.nome}</h1>

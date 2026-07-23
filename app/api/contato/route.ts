@@ -1,12 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export async function POST(request: NextRequest) {
   const dados = await request.json();
 
-  // TODO: conectar a um serviço de e-mail (ex: Resend) quando tivermos a chave.
-  // TODO: migrar para salvar em Firestore (coleção "contatos") quando o projeto
-  // estiver integrado ao Firebase, como os demais produtos do desenvolvedor.
-  console.log("[contato] Nova mensagem recebida:", dados);
-
-  return NextResponse.json({ ok: true });
+  try {
+    await addDoc(collection(db, "pedidos_orcamento"), {
+      tipo: "contato",
+      nome: dados.nome ?? "",
+      email: dados.email ?? "",
+      telefone: dados.telefone ?? "",
+      mensagem: dados.mensagem ?? "",
+      criadoEm: serverTimestamp(),
+    });
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    console.error("[contato] Erro ao gravar no Firestore:", error);
+    return NextResponse.json(
+      { error: "Não foi possível enviar sua mensagem." },
+      { status: 500 }
+    );
+  }
 }

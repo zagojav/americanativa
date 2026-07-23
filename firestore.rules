@@ -1,0 +1,13 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Qualquer visitante pode criar um pedido de contato/franquia (formulário
+    // público), mas só um usuário autenticado (o admin) pode ler, editar ou
+    // apagar os pedidos recebidos.
+    match /pedidos_orcamento/{docId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+  }
+}
