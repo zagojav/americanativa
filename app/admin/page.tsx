@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { signOut } from "firebase/auth";
 import { collection, onSnapshot, orderBy, query, Timestamp } from "firebase/firestore";
-import { db, getFirebaseAuth } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
 
 type PedidoOrcamento = {
   id: string;
@@ -18,7 +16,6 @@ type PedidoOrcamento = {
 };
 
 export default function AdminDashboardPage() {
-  const router = useRouter();
   const [pedidos, setPedidos] = useState<PedidoOrcamento[]>([]);
   const [carregando, setCarregando] = useState(true);
 
@@ -33,22 +30,9 @@ export default function AdminDashboardPage() {
     return unsubscribe;
   }, []);
 
-  async function handleLogout() {
-    await signOut(getFirebaseAuth());
-    router.push("/admin/login");
-  }
-
   return (
     <div className="mx-auto max-w-5xl px-4 py-12">
-      <div className="flex items-center justify-between">
-        <h1 className="font-display text-3xl text-vinho">Pedidos recebidos</h1>
-        <button
-          onClick={handleLogout}
-          className="rounded-md border border-vinho px-4 py-2 text-sm text-vinho hover:bg-vinho hover:text-creme"
-        >
-          Sair
-        </button>
-      </div>
+      <h1 className="font-display text-3xl text-vinho">Pedidos recebidos</h1>
 
       {carregando ? (
         <p className="mt-8 text-vinho/60">Carregando...</p>

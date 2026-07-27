@@ -211,7 +211,7 @@
   {
     "slug": "vinho-stelar-ugni-blanc-kohlberg-branco-seco-750ml",
     "nome": "Vinho Stelar Ugni Blanc Kohlberg Branco Seco 750ml",
-    "descricao": "/* TODO: descrição pendente, aguardando exportação do CSV */",
+    "descricao": "Vinho branco boliviano da uva Ugni Blanc, seco. Garrafa de 750ml.",
     "categoria": "bebidas",
     "subcategoria": "vinhos",
     "peso": "750ml",
@@ -221,7 +221,7 @@
   {
     "slug": "vinho-tannat-aranjuez-tinto-seco-750ml",
     "nome": "Vinho Tannat Aranjuez Tinto Seco 750ml",
-    "descricao": "/* TODO: descrição pendente, aguardando exportação do CSV */",
+    "descricao": "Vinho tinto boliviano da uva Tannat, seco. Garrafa de 750ml.",
     "categoria": "bebidas",
     "subcategoria": "vinhos",
     "peso": "750ml",
@@ -231,7 +231,7 @@
   {
     "slug": "oleo-de-soja-900ml",
     "nome": "Óleo de Soja 900ml",
-    "descricao": "/* TODO: descrição pendente, aguardando exportação do CSV */",
+    "descricao": "Óleo de soja importado da Bolívia, embalagem de 900ml.",
     "categoria": "vegetais-graos-oleos",
     "subcategoria": "oleos-diversos",
     "peso": "900ml",
@@ -241,8 +241,9 @@
   {
     "slug": "sueter",
     "nome": "Suéter",
-    "descricao": "/* TODO: descrição pendente, aguardando exportação do CSV */",
+    "descricao": "Suéter de lã de alpaca boliviana, disponível em 5 cores.",
     "categoria": "vestuario",
+    "subcategoria": "la-de-alparca",
     "precoUnitario": null,
     "imagens": [
       "/images/produtos/vestuario/sueter-marrom.png",
@@ -258,7 +259,7 @@
   {
     "slug": "jaqueta-de-couro",
     "nome": "Jaqueta de Couro",
-    "descricao": "/* TODO: descrição pendente, aguardando exportação do CSV */",
+    "descricao": "Jaqueta de couro importada da Bolívia.",
     "categoria": "vestuario",
     "precoUnitario": null,
     "imagens": []
@@ -266,7 +267,7 @@
   {
     "slug": "sapato-derby-masculino-de-couro-soho-preto",
     "nome": "Sapato Derby Masculino de Couro Soho Preto",
-    "descricao": "/* TODO: descrição pendente, aguardando exportação do CSV */",
+    "descricao": "Sapato masculino modelo Derby, couro na cor preta.",
     "categoria": "vestuario",
     "precoUnitario": null,
     "imagens": []

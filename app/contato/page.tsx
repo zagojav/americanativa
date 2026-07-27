@@ -13,7 +13,7 @@ export default function ContatoPage() {
     <div className="mx-auto max-w-3xl px-4 py-16">
       <h1 className="font-display text-4xl text-vinho">Contato</h1>
       <p className="mt-2 text-vinho/70">
-        Fale com a gente — respondemos rápido pelo WhatsApp.
+        Fale com a gente. Respondemos rápido pelo WhatsApp.
       </p>
 
       <a

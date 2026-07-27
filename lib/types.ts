@@ -9,6 +9,8 @@ export type Produto = {
   precoUnitario: number | null; // null = "sob consulta"
   imagens: string[];
   variacoes?: { tipo: "cor" | "tamanho"; opcoes: string[] }[];
+  ativo: boolean;
+  ordem: number;
 };
 
 export type Subcategoria = {

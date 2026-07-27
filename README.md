@@ -34,58 +34,101 @@ modelo completo.
 | `NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY` | Public key do Mercado Pago. |
 | `NEXT_PUBLIC_WHATSAPP_NUMBER` | Número de WhatsApp da loja (formato `55DDDNUMERO`, sem símbolos). |
 | `NEXT_PUBLIC_SITE_URL` | URL pública do site em produção (usada nas `back_urls` do checkout, no sitemap e no robots.txt). |
+| `GMAIL_USER` | E-mail do Gmail que envia (e recebe) as notificações de Contato/Franquia. Hoje `americanativa7@gmail.com`. |
+| `GMAIL_APP_PASSWORD` | Senha de app do Gmail (não é a senha normal da conta), ver seção "E-mail de notificação" abaixo. |
 | `NEXT_PUBLIC_FIREBASE_API_KEY` | Firebase — Project Settings → General → seu app web. |
 | `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` | Idem. |
 | `NEXT_PUBLIC_FIREBASE_PROJECT_ID` | Idem. |
-| `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` | Idem. |
+| `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` | Idem (o app não usa o Firebase Storage hoje, mas o SDK pede o campo mesmo assim). |
 | `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | Idem. |
 | `NEXT_PUBLIC_FIREBASE_APP_ID` | Idem. |
+| `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` | Painel do Cloudinary → Dashboard → "Cloud name". |
+| `NEXT_PUBLIC_CLOUDINARY_API_KEY` | Painel do Cloudinary → Dashboard → "API Key". |
+| `CLOUDINARY_API_SECRET` | Painel do Cloudinary → Dashboard → "API Secret". Secreto: sem `NEXT_PUBLIC_`, só usado no servidor (`app/api/cloudinary-signature`). |
 
 ## Firebase — configuração (Firestore + Authentication)
 
 1. Crie um projeto em [console.firebase.google.com](https://console.firebase.google.com).
-2. Ative **Authentication** → método "E-mail/senha".
+2. Ative **Authentication** → métodos "E-mail/senha" e, opcionalmente,
+   "Google" (o login com Google aparece tanto em `/entrar` quanto em
+   `/admin/login`; pra funcionar fora de `localhost`, o domínio de produção
+   precisa estar em Authentication → Settings → Authorized domains).
 3. Ative **Firestore Database** (modo produção).
 4. Em Project Settings → General, crie um app Web e copie os 6 valores para
    `.env.local`.
-5. Aplique as regras de [firestore.rules](firestore.rules) no console
-   (Firestore → Regras) ou via Firebase CLI (`firebase deploy --only firestore:rules`).
-6. Crie o usuário administrador em Authentication → Users → Add user
-   (e-mail/senha). Não existe usuário/senha hardcoded em nenhum lugar do
-   código — a conta é criada inteiramente pelo console do Firebase.
+5. Aplique as regras de [firestore.rules](firestore.rules) (Firestore →
+   Regras) no console, ou via Firebase CLI (`firebase deploy --only firestore:rules`).
+   O Firestore começa em "modo de teste" (libera tudo por 30 dias) — sem
+   aplicar essas regras, o acesso volta a ficar aberto depois desse prazo.
+6. Crie o usuário administrador em Authentication → Users → Add user, usando
+   o e-mail `guilherme.rezendezago@gmail.com` (único autorizado a entrar em
+   `/admin` — ver checagem em `app/admin/layout.tsx`). Não existe
+   usuário/senha hardcoded em nenhum lugar do código — a conta é criada
+   inteiramente pelo console do Firebase.
 7. Faça login em `/admin/login` com essa conta.
+8. Rode `node scripts/seed-produtos.mjs` uma vez para migrar o catálogo de
+   `data/produtos.json` para a coleção `produtos` do Firestore (pede e-mail
+   e senha do admin no terminal, não grava em nenhum arquivo). Depois, rode
+   `node scripts/seed-horneados-unicos.mjs` uma vez pra cadastrar o catálogo
+   completo de Horneados Únicos (31 itens, `data/produtos-horneados-unicos.json`,
+   incluindo as subcategorias novas Recheados e Empanadas). Esse segundo
+   script usa `addDoc` (ID automático, sempre cria documento novo) em vez de
+   upsert por slug — **rode só uma vez**, senão duplica os produtos. Se os
+   Horneados Únicos originais (`data/produtos.json`) já foram semeados antes,
+   confira em `/admin/produtos` e apague os antigos pra não ficar com
+   duplicata.
 
-O painel em `/admin` hoje só **lista os pedidos recebidos** pelos formulários
-de Contato e Franquia (coleção `pedidos_orcamento`, campo `tipo` distingue os
-dois). Não há CRUD de produtos/categorias pelo painel nesta etapa — o
-catálogo continua sendo atualizado via código (`data/produtos.json` e
-`data/categorias.ts`), o que já é compatível com o fluxo descrito de exportar
-o CSV da Nuvemshop e repassar para o desenvolvedor preencher.
+O painel em `/admin` tem 3 áreas: **Pedidos** (lista os envios de Contato e
+Franquia, coleção `pedidos_orcamento`), **Produtos** (`/admin/produtos`, CRUD
+completo da coleção `produtos`, incluindo upload de fotos pro Cloudinary) e
+**Leads** (`/admin/leads`, lista quem clicou no botão de WhatsApp de algum
+produto). Há também um link discreto "Painel administrativo" no rodapé do
+site, que leva pra `/admin`.
+
+## Cloudinary (upload de fotos de produto)
+
+As fotos cadastradas pelo painel `/admin/produtos` vão pro Cloudinary (plano
+gratuito, sem cartão), não pro Firebase Storage, evitando depender do plano
+pago (Blaze) do Firebase só pra guardar imagem.
+
+1. Crie uma conta grátis em [cloudinary.com](https://cloudinary.com).
+2. No Dashboard, copie **Cloud name**, **API Key** e **API Secret** para
+   `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`, `NEXT_PUBLIC_CLOUDINARY_API_KEY` e
+   `CLOUDINARY_API_SECRET` (esse último sem `NEXT_PUBLIC_`, pois é secreto:
+   fica só no servidor, nunca chega ao navegador).
+3. Não precisa criar upload preset nem mexer em mais nada no painel do
+   Cloudinary: o upload é assinado no servidor
+   (`app/api/cloudinary-signature/route.ts`, usando o API Secret) e o botão
+   "Adicionar foto" no formulário de produto já usa essas variáveis
+   (`components/admin/ProdutoForm.tsx`, via `next-cloudinary`).
 
 ## Estrutura de dados dos produtos
 
-O catálogo vive em [data/produtos.json](data/produtos.json) (fácil de editar
-manualmente) e a estrutura de categorias em
-[data/categorias.ts](data/categorias.ts). O acesso a esses dados é
-centralizado em [lib/produtos.ts](lib/produtos.ts).
+O catálogo em produção vive na coleção `produtos` do Firestore, editável
+pelo painel `/admin/produtos`. [data/produtos.json](data/produtos.json)
+continua no repositório como a fonte de conteúdo versionada que alimenta o
+`scripts/seed-produtos.mjs` (a carga inicial) — não é mais lido em runtime
+pelo site. A estrutura de categorias continua em código, em
+[data/categorias.ts](data/categorias.ts). O acesso a produtos é centralizado
+em [lib/produtos.ts](lib/produtos.ts).
 
 Descrições de 3 produtos (Cuñapé Bolita, Cuñapé Rosca, Crunchezz) usam o
 texto exato fornecido pelo cliente. As demais descrições dos itens da linha
 Horneados Únicos foram montadas com dados reais do fornecedor (ingredientes
 e peso, extraídos dos catálogos em PDF "SP Catálogo ABIZCOCHADOS" e
-"Catálogo Únicos"), em tom objetivo — não são texto de marketing definitivo.
-Os catálogos do fornecedor divergem entre si em 3 pontos; usamos o valor do
-"SP Catálogo ABIZCOCHADOS" nos três casos:
+"Catálogo Únicos"), em tom objetivo, sem texto de marketing. Os catálogos do
+fornecedor divergem entre si em 3 pontos; usamos o valor do "SP Catálogo
+ABIZCOCHADOS" nos três casos:
 
 - **Crunchezz**: peso líquido 50g ("SP Catálogo") vs. 65g ("Catálogo Únicos").
 - **Bizcochos de Maíz / Mini Bizcochos de Maíz**: ingrediente final "sal"
   ("SP Catálogo") vs. "leite" ("Catálogo Únicos").
 - **Paraguayo Rosca**: peso líquido 140g ("SP Catálogo") vs. 120g ("Catálogo Únicos").
 
-Vale confirmar com o fornecedor antes de publicar. Vinhos, óleo, jaqueta e
-sapato ainda estão com `descricao` marcada como
-`/* TODO: descrição pendente, aguardando exportação do CSV */`, conforme
-combinado — não inventamos texto pra esses.
+Vale confirmar com o fornecedor antes de publicar. Os vinhos, o óleo, a
+jaqueta e o sapato têm uma descrição mínima e factual (só o que já se sabe
+pelo nome/categoria) até o cliente enviar dados reais de fornecedor pra
+esses itens.
 
 ## Pagamento (Mercado Pago Checkout Pro)
 
@@ -100,8 +143,18 @@ arquivo.
 
 As rotas `app/api/contato/route.ts` e `app/api/franquia/route.ts` gravam
 cada envio na coleção `pedidos_orcamento` do Firestore (`tipo: "contato"` ou
-`"franquia"`), visível em `/admin`. Envio por e-mail (ex: Resend) ainda não
-está conectado — hoje o único jeito de ver os pedidos é pelo painel.
+`"franquia"`), visível em `/admin`, e também disparam um e-mail de aviso
+(`lib/email.ts`) para `GMAIL_USER`. Se o e-mail falhar ou as variáveis não
+estiverem configuradas, o pedido continua sendo salvo normalmente no
+Firestore — o e-mail é só um aviso extra, não o registro principal.
+
+### E-mail de notificação (Gmail SMTP)
+
+1. Ative a verificação em duas etapas na conta `americanativa7@gmail.com`
+   (Conta Google → Segurança).
+2. Em Segurança → "Senhas de app", gere uma senha de app para o Gmail.
+3. Coloque o e-mail em `GMAIL_USER` e a senha gerada (não a senha normal da
+   conta) em `GMAIL_APP_PASSWORD` no `.env.local`.
 
 ## Regra de atacado
 
@@ -139,8 +192,10 @@ link vem de `NEXT_PUBLIC_WHATSAPP_NUMBER`.
   cliente confirmar que o manual é a referência correta, essa troca afeta
   `tailwind.config.ts` e `app/globals.css` em todo o projeto.
 - Webhook do Mercado Pago (`notification_url`) ainda não configurado.
-- Painel admin faz só leitura dos pedidos — sem CRUD de produtos/categorias
-  (ver seção Firebase acima).
+- CRUD de produtos, captura de leads e o script de seed só são testáveis de
+  ponta a ponta depois de configurar um projeto Firebase real, aplicar
+  `firestore.rules`, criar o usuário admin, configurar o Cloudinary e rodar
+  `node scripts/seed-produtos.mjs` (ver seções Firebase e Cloudinary acima).
 
 ## Deploy
 

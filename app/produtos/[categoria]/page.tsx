@@ -8,7 +8,7 @@ import {
 } from "@/lib/produtos";
 import { ProductCard } from "@/components/ProductCard";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   return getCategorias().map((c) => ({ categoria: c.slug }));
 }
 
@@ -22,7 +22,7 @@ export async function generateMetadata({
   if (!categoria) return {};
   return {
     title: categoria.label,
-    description: `Produtos da categoria ${categoria.label} — América Nativa.`,
+    description: `Produtos da categoria ${categoria.label}, América Nativa.`,
   };
 }
 
@@ -35,23 +35,31 @@ export default async function CategoriaPage({
   const categoria = getCategoria(categoriaSlug);
   if (!categoria) notFound();
 
-  const produtos = getProdutosPorCategoria(categoriaSlug);
+  const produtos = await getProdutosPorCategoria(categoriaSlug);
+
+  const subcategoriasComContagem = categoria.subcategorias
+    ? await Promise.all(
+        categoria.subcategorias.map(async (sub) => ({
+          ...sub,
+          total: (await getProdutosPorSubcategoria(categoriaSlug, sub.slug)).length,
+        }))
+      )
+    : undefined;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-16">
       <h1 className="font-display text-4xl text-vinho">{categoria.label}</h1>
 
-      {categoria.subcategorias && categoria.subcategorias.length > 0 && (
+      {subcategoriasComContagem && subcategoriasComContagem.length > 0 && (
         <div className="mt-6 flex flex-wrap gap-2">
-          {categoria.subcategorias.map((sub) => {
-            const totalSub = getProdutosPorSubcategoria(categoriaSlug, sub.slug).length;
-            if (totalSub === 0) {
+          {subcategoriasComContagem.map((sub) => {
+            if (sub.total === 0) {
               return (
                 <span
                   key={sub.slug}
                   className="cursor-not-allowed rounded-full border border-dourado/20 px-4 py-1.5 text-sm text-vinho/40"
                 >
-                  {sub.label} — em breve
+                  {sub.label} (em breve)
                 </span>
               );
             }
@@ -72,10 +80,10 @@ export default async function CategoriaPage({
         <p className="mt-10 text-vinho/60">
           Nenhum produto cadastrado nesta categoria no momento.
         </p>
-      ) : categoria.subcategorias && categoria.subcategorias.length > 0 ? (
+      ) : subcategoriasComContagem && subcategoriasComContagem.length > 0 ? (
         <div className="mt-10 space-y-12">
-          {categoria.subcategorias.map((sub) => {
-            const produtosSub = getProdutosPorSubcategoria(categoriaSlug, sub.slug);
+          {await Promise.all(subcategoriasComContagem.map(async (sub) => {
+            const produtosSub = await getProdutosPorSubcategoria(categoriaSlug, sub.slug);
             if (produtosSub.length === 0) return null;
             return (
               <section key={sub.slug} id={sub.slug}>
@@ -87,7 +95,7 @@ export default async function CategoriaPage({
                 </div>
               </section>
             );
-          })}
+          }))}
         </div>
       ) : (
         <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">

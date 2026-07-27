@@ -19,7 +19,7 @@ export function PlaceholderImage({
     >
       <Logo className="h-10 w-10 opacity-40" />
       <span className="text-xs uppercase tracking-wide text-center px-4">
-        Foto pendente — {label}
+        Foto pendente: {label}
       </span>
     </div>
   );

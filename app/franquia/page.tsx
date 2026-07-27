@@ -15,7 +15,7 @@ export default function FranquiaPage() {
           <h1 className="font-display text-4xl text-vinho">Seja um franqueado</h1>
           <p className="mt-4 text-lg text-vinho/80">
             Leve os sabores da Bolívia para o seu negócio. A América Nativa
-            está expandindo por meio de franquias e pontos de venda — junte-se
+            está expandindo por meio de franquias e pontos de venda. Junte-se
             a nós.
           </p>
 

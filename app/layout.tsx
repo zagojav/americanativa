@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { WhatsAppFloatButton } from "@/components/WhatsAppFloatButton";
 import { CartProvider } from "@/components/CartContext";
 import { siteConfig } from "@/lib/site-config";
+import { getCategoriasComContagem } from "@/lib/produtos";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -21,17 +22,19 @@ const instrumentSans = Instrument_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
   title: {
-    default: `${siteConfig.nomeMarca} — ${siteConfig.tagline}`,
+    default: `${siteConfig.nomeMarca} · ${siteConfig.tagline}`,
     template: `%s | ${siteConfig.nomeMarca}`,
   },
   description: siteConfig.descricaoCurta,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const categorias = await getCategoriasComContagem();
+
   return (
     <html
       lang="pt-BR"
@@ -39,7 +42,7 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col bg-creme font-sans antialiased">
         <CartProvider>
-          <Header />
+          <Header categorias={categorias} />
           <main className="flex-1">{children}</main>
           <Footer />
           <WhatsAppFloatButton />

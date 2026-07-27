@@ -4,17 +4,11 @@ import Link from "next/link";
 import { useState } from "react";
 import { Logo } from "./Logo";
 import { useCart } from "./CartContext";
-import { getCategoriasComContagem } from "@/lib/produtos";
+import type { getCategoriasComContagem } from "@/lib/produtos";
 
-const categorias = getCategoriasComContagem();
+type CategoriaComContagem = Awaited<ReturnType<typeof getCategoriasComContagem>>[number];
 
-const linksInstitucionais = [
-  { href: "/quem-somos", label: "Quem Somos" },
-  { href: "/franquia", label: "Franquia" },
-  { href: "/contato", label: "Contato" },
-];
-
-export function Header() {
+export function Header({ categorias }: { categorias: CategoriaComContagem[] }) {
   const [menuAberto, setMenuAberto] = useState(false);
   const { totalItens } = useCart();
 
@@ -29,6 +23,12 @@ export function Header() {
         </Link>
 
         <nav className="hidden items-center gap-6 lg:flex">
+          <Link href="/" className="font-sans text-sm text-vinho hover:text-dourado-dark">
+            Início
+          </Link>
+          <Link href="/quem-somos" className="font-sans text-sm text-vinho hover:text-dourado-dark">
+            Quem Somos
+          </Link>
           <div className="group relative">
             <button className="font-sans text-sm text-vinho hover:text-dourado-dark">
               Produtos
@@ -53,18 +53,24 @@ export function Header() {
               </Link>
             </div>
           </div>
-          {linksInstitucionais.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className="font-sans text-sm text-vinho hover:text-dourado-dark"
-            >
-              {l.label}
-            </Link>
-          ))}
+          <Link href="/contato" className="font-sans text-sm text-vinho hover:text-dourado-dark">
+            Contato
+          </Link>
+          <Link href="/franquia" className="font-sans text-sm text-vinho hover:text-dourado-dark">
+            Franquia
+          </Link>
         </nav>
 
         <div className="flex items-center gap-3">
+          <Link
+            href="/entrar"
+            aria-label="Entrar ou criar conta"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-vinho/30 text-vinho/70 hover:border-vinho hover:text-vinho"
+          >
+            <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current">
+              <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-4.42 0-8 2.24-8 5v2h16v-2c0-2.76-3.58-5-8-5Z" />
+            </svg>
+          </Link>
           <Link
             href="/carrinho"
             className="relative rounded-md border border-vinho px-3 py-1.5 text-sm text-vinho hover:bg-vinho hover:text-creme"
@@ -88,6 +94,12 @@ export function Header() {
 
       {menuAberto && (
         <nav className="flex flex-col gap-1 border-t border-dourado/20 px-4 py-3 lg:hidden">
+          <Link href="/" className="py-2 text-sm text-vinho">
+            Início
+          </Link>
+          <Link href="/quem-somos" className="py-2 text-sm text-vinho">
+            Quem Somos
+          </Link>
           <Link href="/produtos" className="py-2 text-sm text-vinho">
             Produtos
           </Link>
@@ -102,11 +114,12 @@ export function Header() {
                 {c.label}
               </Link>
             ))}
-          {linksInstitucionais.map((l) => (
-            <Link key={l.href} href={l.href} className="py-2 text-sm text-vinho">
-              {l.label}
-            </Link>
-          ))}
+          <Link href="/contato" className="py-2 text-sm text-vinho">
+            Contato
+          </Link>
+          <Link href="/franquia" className="py-2 text-sm text-vinho">
+            Franquia
+          </Link>
         </nav>
       )}
     </header>

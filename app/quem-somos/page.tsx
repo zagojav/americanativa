@@ -32,7 +32,7 @@ export default function QuemSomosPage() {
           </p>
           <p>
             Trabalhamos para que o melhor do continente chegue até a sua casa ou
-            o seu negócio com confiança — seja uma compra única ou um pedido em
+            o seu negócio com confiança, seja uma compra única ou um pedido em
             grande quantidade.
           </p>
           <p>

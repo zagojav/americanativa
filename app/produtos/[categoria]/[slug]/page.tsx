@@ -7,9 +7,11 @@ import { PriceTag } from "@/components/PriceTag";
 import { AtacadoBlock } from "@/components/AtacadoBlock";
 import { AddToCartButton } from "@/components/AddToCartButton";
 import { VariantSelector } from "@/components/VariantSelector";
+import { ProdutoGaleriaComCor } from "@/components/ProdutoGaleriaComCor";
 
-export function generateStaticParams() {
-  return getTodosProdutos().map((p) => ({ categoria: p.categoria, slug: p.slug }));
+export async function generateStaticParams() {
+  const produtos = await getTodosProdutos();
+  return produtos.map((p) => ({ categoria: p.categoria, slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -18,7 +20,7 @@ export async function generateMetadata({
   params: Promise<{ categoria: string; slug: string }>;
 }): Promise<Metadata> {
   const { categoria, slug } = await params;
-  const produto = getProduto(categoria, slug);
+  const produto = await getProduto(categoria, slug);
   if (!produto) return {};
   return {
     title: produto.nome,
@@ -32,13 +34,24 @@ export default async function ProdutoPage({
   params: Promise<{ categoria: string; slug: string }>;
 }) {
   const { categoria, slug } = await params;
-  const produto = getProduto(categoria, slug);
+  const produto = await getProduto(categoria, slug);
   if (!produto) notFound();
+
+  const variacaoCor = produto.variacoes?.find(
+    (v) => v.tipo === "cor" && v.opcoes.length === produto.imagens.length
+  );
+  const outrasVariacoes = produto.variacoes?.filter((v) => v !== variacaoCor);
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-16">
       <div className="grid gap-10 sm:grid-cols-2">
-        {produto.imagens[0] ? (
+        {variacaoCor ? (
+          <ProdutoGaleriaComCor
+            nome={produto.nome}
+            imagens={produto.imagens}
+            cores={variacaoCor.opcoes}
+          />
+        ) : produto.imagens[0] ? (
           <div className="relative aspect-square w-full overflow-hidden rounded-lg">
             <Image
               src={produto.imagens[0]}
@@ -64,9 +77,9 @@ export default async function ProdutoPage({
             <AtacadoBlock nomeProduto={produto.nome} />
           </div>
 
-          {produto.variacoes && produto.variacoes.length > 0 && (
+          {outrasVariacoes && outrasVariacoes.length > 0 && (
             <div className="mt-6 space-y-4">
-              {produto.variacoes.map((variacao) => (
+              {outrasVariacoes.map((variacao) => (
                 <VariantSelector key={variacao.tipo} variacao={variacao} />
               ))}
             </div>
@@ -82,7 +95,7 @@ export default async function ProdutoPage({
               />
             ) : (
               <p className="text-sm text-vinho/60">
-                Produto disponível sob consulta — solicite pelo WhatsApp acima.
+                Produto disponível sob consulta. Solicite pelo WhatsApp acima.
               </p>
             )}
           </div>

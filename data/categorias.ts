@@ -16,6 +16,8 @@ export const categorias: Categoria[] = [
       { slug: "milho", label: "Milho" },
       { slug: "arroz", label: "Arroz" },
       { slug: "doce", label: "Doce" },
+      { slug: "recheados", label: "Recheados" },
+      { slug: "empanadas", label: "Empanadas" },
     ],
   },
   {
@@ -39,9 +41,20 @@ export const categorias: Categoria[] = [
   {
     slug: "vestuario",
     label: "Vestuário",
+    subcategorias: [
+      { slug: "la-de-alparca", label: "Lã de Alparca" },
+      { slug: "sobretudo", label: "Sobretudo" },
+      { slug: "blusas", label: "Blusas" },
+      { slug: "cardiga", label: "Cardigã" },
+    ],
   },
   {
     slug: "meis-de-abelhas-nativas",
     label: "Méis de Abelhas Nativas",
+  },
+  {
+    slug: "chas",
+    label: "Chás",
+    subcategorias: [{ slug: "cha-mate", label: "Chá Mate" }],
   },
 ];

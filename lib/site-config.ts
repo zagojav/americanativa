@@ -1,6 +1,6 @@
 export const siteConfig = {
   nomeMarca: "América Nativa",
-  nomeInstitucional: "América Nativa LTDA — by AS Market",
+  nomeInstitucional: "América Nativa LTDA · by AS Market",
   tagline: "Importação · Exportação · Franquia",
   descricaoCurta:
     "Importadora e distribuidora de produtos da Bolívia para o Brasil: alimentos, bebidas e vestuário selecionados na origem.",

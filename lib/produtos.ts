@@ -1,53 +1,76 @@
-import produtosJson from "@/data/produtos.json";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { unstable_cache } from "next/cache";
 import { categorias } from "@/data/categorias";
+import produtosJson from "@/data/produtos.json";
+import { db } from "@/lib/firebase";
 import { Categoria, Produto } from "@/lib/types";
 
 /**
- * Fonte de dados atual: arquivo local data/produtos.json.
- * Escolhido para facilitar edição manual enquanto o catálogo não está fechado.
- *
- * Migração futura para Firebase Firestore (o projeto já usa Firebase em
- * outros produtos do mesmo desenvolvedor):
- *
- *   import { collection, getDocs } from "firebase/firestore";
- *   import { db } from "@/lib/firebase";
- *
- *   export async function getProdutos(): Promise<Produto[]> {
- *     const snapshot = await getDocs(collection(db, "produtos"));
- *     return snapshot.docs.map((doc) => doc.data() as Produto);
- *   }
- *
- * As categorias também migrariam para uma coleção `categorias`, substituindo
- * data/categorias.ts. As funções abaixo já isolam o acesso aos dados, então
- * a migração troca apenas a implementação interna, não os call sites.
+ * Catálogo de fallback: usado quando o Firestore ainda não foi configurado
+ * (sem projeto real em .env.local) ou quando a collection "produtos" ainda
+ * está vazia (antes de rodar scripts/seed-produtos.mjs). Sem isso, o site
+ * inteiro (menu, home, páginas de categoria) aparece vazio até o Firebase
+ * estar 100% configurado — o fallback garante que o catálogo continua
+ * funcionando normalmente nesse meio-tempo, e para de ser usado assim que a
+ * collection "produtos" tiver pelo menos um documento ativo.
  */
-const produtos = produtosJson as Produto[];
+const produtosFallback: Produto[] = (produtosJson as Omit<Produto, "ativo" | "ordem">[]).map(
+  (produto, indice) => ({ ...produto, ativo: true, ordem: indice })
+);
 
-export function getTodosProdutos(): Produto[] {
-  return produtos;
+/**
+ * Fonte de dados: collection "produtos" no Firestore, gerenciada pelo painel
+ * /admin/produtos. Chamado a partir de Server Components (mesmo padrão já
+ * usado nas rotas de contato/franquia, que gravam no Firestore no servidor).
+ *
+ * Cacheado com revalidate curto (unstable_cache) pra não bater no Firestore
+ * a cada requisição — uma edição no admin demora até 60s pra aparecer no site.
+ */
+async function buscarProdutosAtivos(): Promise<Produto[]> {
+  try {
+    const snapshot = await getDocs(
+      query(collection(db, "produtos"), where("ativo", "==", true))
+    );
+    if (snapshot.empty) return produtosFallback;
+    return snapshot.docs
+      .map((doc) => doc.data() as Produto)
+      .sort((a, b) => a.ordem - b.ordem);
+  } catch {
+    return produtosFallback;
+  }
 }
 
-export function getProdutosPorCategoria(categoriaSlug: string): Produto[] {
+export const getTodosProdutos = unstable_cache(
+  buscarProdutosAtivos,
+  ["produtos-ativos"],
+  { revalidate: 60 }
+);
+
+export async function getProdutosPorCategoria(categoriaSlug: string): Promise<Produto[]> {
+  const produtos = await getTodosProdutos();
   return produtos.filter((p) => p.categoria === categoriaSlug);
 }
 
-export function getProdutosPorSubcategoria(
+export async function getProdutosPorSubcategoria(
   categoriaSlug: string,
   subcategoriaSlug: string
-): Produto[] {
+): Promise<Produto[]> {
+  const produtos = await getTodosProdutos();
   return produtos.filter(
     (p) => p.categoria === categoriaSlug && p.subcategoria === subcategoriaSlug
   );
 }
 
-export function getProduto(
+export async function getProduto(
   categoriaSlug: string,
   slug: string
-): Produto | undefined {
+): Promise<Produto | undefined> {
+  const produtos = await getTodosProdutos();
   return produtos.find((p) => p.categoria === categoriaSlug && p.slug === slug);
 }
 
-export function getProdutoPorSlug(slug: string): Produto | undefined {
+export async function getProdutoPorSlug(slug: string): Promise<Produto | undefined> {
+  const produtos = await getTodosProdutos();
   return produtos.find((p) => p.slug === slug);
 }
 
@@ -64,12 +87,14 @@ export function getCategoria(slug: string): Categoria | undefined {
  * navegação: categorias/subcategorias sem produtos devem ser ocultadas ou
  * exibidas como "em breve" (nunca como link ativo vazio).
  */
-export function getCategoriasComContagem() {
+export async function getCategoriasComContagem() {
+  const produtos = await getTodosProdutos();
+
   return categorias.map((categoria) => {
-    const produtosDaCategoria = getProdutosPorCategoria(categoria.slug);
+    const produtosDaCategoria = produtos.filter((p) => p.categoria === categoria.slug);
     const subcategorias = categoria.subcategorias?.map((sub) => ({
       ...sub,
-      totalProdutos: getProdutosPorSubcategoria(categoria.slug, sub.slug).length,
+      totalProdutos: produtosDaCategoria.filter((p) => p.subcategoria === sub.slug).length,
     }));
 
     return {

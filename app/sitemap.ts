@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { getCategorias, getTodosProdutos } from "@/lib/produtos";
 import { siteConfig } from "@/lib/site-config";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const paginasEstaticas = [
     "",
     "/quem-somos",
@@ -20,7 +20,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(),
   }));
 
-  const paginasProduto = getTodosProdutos().map((produto) => ({
+  const produtos = await getTodosProdutos();
+  const paginasProduto = produtos.map((produto) => ({
     url: `${siteConfig.siteUrl}/produtos/${produto.categoria}/${produto.slug}`,
     lastModified: new Date(),
   }));

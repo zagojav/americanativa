@@ -9,6 +9,10 @@ export type BannerSlide = {
   mobileSrc: string;
   alt: string;
   href?: string;
+  /** false quando mobileSrc é só uma cópia da imagem desktop (sem recorte
+   * vertical próprio) — nesse caso mantemos a proporção larga em vez de
+   * espremer a imagem no recorte alto/estreito. Default: true. */
+  recorteMobileProprio?: boolean;
 };
 
 export function BannerCarousel({ slides }: { slides: BannerSlide[] }) {
@@ -66,6 +70,13 @@ export function BannerCarousel({ slides }: { slides: BannerSlide[] }) {
         className="flex w-full snap-x snap-mandatory overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {slides.map((slide, indice) => {
+          // Sem recorte mobile dedicado: a imagem desktop reaproveitada não
+          // tem o enquadramento vertical certo pro recorte alto/estreito do
+          // mobile. Em vez de cortar (object-cover, que corta texto e logo),
+          // usa object-contain — a imagem aparece inteira, com uma margem,
+          // mas todo o carrossel mantém a mesma altura em qualquer slide.
+          const temRecorteMobile = slide.recorteMobileProprio !== false;
+
           const conteudo = (
             <>
               <Image
@@ -82,7 +93,7 @@ export function BannerCarousel({ slides }: { slides: BannerSlide[] }) {
                 fill
                 sizes="100vw"
                 priority={indice === 0}
-                className="block object-cover md:hidden"
+                className={`block md:hidden ${temRecorteMobile ? "object-cover" : "object-contain bg-creme"}`}
               />
             </>
           );
@@ -92,11 +103,11 @@ export function BannerCarousel({ slides }: { slides: BannerSlide[] }) {
               className="relative aspect-[1136/1385] w-full flex-none snap-start md:aspect-[1829/860]"
             >
               {slide.href ? (
-                <Link href={slide.href} className="block h-full w-full">
+                <Link href={slide.href} className="relative block h-full w-full">
                   {conteudo}
                 </Link>
               ) : (
-                <div className="h-full w-full">{conteudo}</div>
+                <div className="relative h-full w-full">{conteudo}</div>
               )}
             </div>
           );
@@ -122,7 +133,7 @@ export function BannerCarousel({ slides }: { slides: BannerSlide[] }) {
             ›
           </button>
 
-          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2">
+          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2 rounded-full bg-vinho/25 px-3 py-1.5 backdrop-blur-sm">
             {slides.map((_, indice) => (
               <button
                 key={indice}

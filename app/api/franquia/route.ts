@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { enviarNotificacaoPorEmail } from "@/lib/email";
 
 export async function POST(request: NextRequest) {
   const dados = await request.json();
@@ -15,6 +16,15 @@ export async function POST(request: NextRequest) {
       mensagem: dados.mensagem ?? "",
       criadoEm: serverTimestamp(),
     });
+
+    enviarNotificacaoPorEmail("Novo interesse em franquia, América Nativa", {
+      Nome: dados.nome ?? "",
+      "E-mail": dados.email ?? "",
+      Telefone: dados.telefone ?? "",
+      Cidade: dados.cidade ?? "",
+      Mensagem: dados.mensagem ?? "",
+    }).catch((error) => console.error("[franquia] Erro ao enviar e-mail:", error));
+
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("[franquia] Erro ao gravar no Firestore:", error);

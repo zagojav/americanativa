@@ -9,13 +9,15 @@ const banners: BannerSlide[] = [
   {
     desktopSrc: "/images/banners/01-quem-somos-desktop.png",
     mobileSrc: "/images/banners/01-quem-somos-mobile.png",
-    alt: "América Nativa — o melhor da América do Sul, até você",
+    alt: "América Nativa, o melhor da América do Sul até você",
     href: "/quem-somos",
+    recorteMobileProprio: false,
   },
   {
     desktopSrc: "/images/banners/02-institucional-desktop.png",
     mobileSrc: "/images/banners/02-institucional-mobile.png",
-    alt: "América Nativa LTDA — Importação, Exportação e Franquia",
+    alt: "América Nativa LTDA · Importação, Exportação e Franquia",
+    recorteMobileProprio: false,
   },
   {
     desktopSrc: "/images/banners/03-horneados-desktop.png",
@@ -26,7 +28,7 @@ const banners: BannerSlide[] = [
   {
     desktopSrc: "/images/banners/04-produtos-desktop.png",
     mobileSrc: "/images/banners/04-produtos-mobile.png",
-    alt: "Tesouros da Bolívia — vestuário e produtos autênticos",
+    alt: "Tesouros da Bolívia: vestuário e produtos autênticos",
     href: "/produtos",
   },
   {
@@ -37,8 +39,8 @@ const banners: BannerSlide[] = [
   },
 ];
 
-export default function Home() {
-  const categorias = getCategoriasComContagem();
+export default async function Home() {
+  const categorias = await getCategoriasComContagem();
 
   return (
     <div className="flex flex-col">
@@ -96,7 +98,7 @@ export default function Home() {
           <h2 className="font-display text-3xl">Seja um franqueado</h2>
           <p className="max-w-2xl text-creme/80">
             Leve os sabores da Bolívia para o seu negócio. A América Nativa
-            está expandindo por meio de franquias e pontos de venda — junte-se
+            está expandindo por meio de franquias e pontos de venda. Junte-se
             a nós.
           </p>
           <Link

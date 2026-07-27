@@ -8,8 +8,9 @@ export const metadata: Metadata = {
   description: "Catálogo completo de produtos importados da Bolívia: alimentos, bebidas, vestuário e mais.",
 };
 
-export default function ProdutosPage() {
-  const categorias = getCategoriasComContagem().filter((c) => c.totalProdutos > 0);
+export default async function ProdutosPage() {
+  const todasCategorias = await getCategoriasComContagem();
+  const categorias = todasCategorias.filter((c) => c.totalProdutos > 0);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-16">
@@ -19,8 +20,8 @@ export default function ProdutosPage() {
       </p>
 
       <div className="mt-10 space-y-16">
-        {categorias.map((categoria) => {
-          const produtos = getProdutosPorCategoria(categoria.slug);
+        {await Promise.all(categorias.map(async (categoria) => {
+          const produtos = await getProdutosPorCategoria(categoria.slug);
           return (
             <section key={categoria.slug}>
               <div className="flex items-baseline justify-between">
@@ -39,7 +40,7 @@ export default function ProdutosPage() {
               </div>
             </section>
           );
-        })}
+        }))}
       </div>
     </div>
   );

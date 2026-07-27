@@ -9,5 +9,20 @@ service cloud.firestore {
       allow create: if true;
       allow read, update, delete: if request.auth != null;
     }
+
+    // Catálogo de produtos: leitura pública só dos ativos (a home e as
+    // páginas de categoria/produto só devem mostrar isso mesmo); o painel
+    // admin, autenticado, precisa ler e escrever tudo (inclusive inativos).
+    match /produtos/{docId} {
+      allow read: if resource.data.ativo == true || request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // Lead gerado ao clicar no botão de WhatsApp de um produto: qualquer
+    // visitante pode criar, só o admin autenticado lê/edita/apaga.
+    match /leads/{docId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
   }
 }

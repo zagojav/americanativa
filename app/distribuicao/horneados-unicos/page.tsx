@@ -10,7 +10,7 @@ import { PlaceholderImage } from "@/components/PlaceholderImage";
 export const metadata: Metadata = {
   title: "Horneados Únicos",
   description:
-    "América Nativa é distribuidora oficial dos Horneados Únicos no Brasil — tradição familiar boliviana à base de queijo e amido de yuca.",
+    "América Nativa é distribuidora oficial dos Horneados Únicos no Brasil, tradição familiar boliviana à base de queijo e amido de yuca.",
 };
 
 export default function HorneadosUnicosPage() {
@@ -44,9 +44,9 @@ export default function HorneadosUnicosPage() {
 
       {/* Galeria — fotos reais pendentes de envio pelo cliente */}
       <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3">
-        <PlaceholderImage label="Horneados Únicos — foto 1" className="aspect-square w-full rounded-lg" />
-        <PlaceholderImage label="Horneados Únicos — foto 2" className="aspect-square w-full rounded-lg" />
-        <PlaceholderImage label="Horneados Únicos — foto 3" className="aspect-square w-full rounded-lg" />
+        <PlaceholderImage label="Horneados Únicos, foto 1" className="aspect-square w-full rounded-lg" />
+        <PlaceholderImage label="Horneados Únicos, foto 2" className="aspect-square w-full rounded-lg" />
+        <PlaceholderImage label="Horneados Únicos, foto 3" className="aspect-square w-full rounded-lg" />
       </div>
 
       <div className="mt-12 flex justify-center">

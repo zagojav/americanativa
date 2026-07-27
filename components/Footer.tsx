@@ -68,8 +68,13 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-creme/10 px-4 py-4 text-center text-xs text-creme/60">
-        © {new Date().getFullYear()} América Nativa LTDA — by AS Market. Todos os direitos reservados.
+      <div className="flex flex-col items-center gap-2 border-t border-creme/10 px-4 py-4 text-center text-xs text-creme/60 sm:flex-row sm:justify-between">
+        <span>
+          © {new Date().getFullYear()} América Nativa LTDA · by AS Market. Todos os direitos reservados.
+        </span>
+        <Link href="/admin/login" className="text-creme/50 hover:text-dourado">
+          Painel administrativo
+        </Link>
       </div>
     </footer>
   );
