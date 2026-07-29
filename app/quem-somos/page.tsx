@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PlaceholderImage } from "@/components/PlaceholderImage";
+import { Logo } from "@/components/Logo";
 import { BrandMotif } from "@/components/BrandMotif";
 
 export const metadata: Metadata = {
@@ -16,7 +16,9 @@ export default function QuemSomosPage() {
       <div className="relative mx-auto max-w-3xl px-4 py-16">
         <h1 className="font-display text-4xl text-vinho">Quem Somos</h1>
 
-        <PlaceholderImage label="equipe / origem dos produtos" className="mt-8 aspect-[16/9] w-full rounded-lg" />
+        <div className="mt-8 flex aspect-[16/9] w-full items-center justify-center rounded-lg border border-dourado/30 bg-vinho/5">
+          <Logo className="h-32 w-32" />
+        </div>
 
         <div className="mt-8 space-y-6 text-lg leading-relaxed text-vinho/90">
           <p>

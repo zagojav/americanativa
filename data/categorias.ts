@@ -11,6 +11,7 @@ export const categorias: Categoria[] = [
   {
     slug: "horneados-unicos",
     label: "Horneados Únicos",
+    imagem: "/images/categorias/horneados-unicos.png",
     subcategorias: [
       { slug: "cunapes-biscoitos", label: "Cuñapés Biscoitos" },
       { slug: "milho", label: "Milho" },
@@ -23,6 +24,7 @@ export const categorias: Categoria[] = [
   {
     slug: "bebidas",
     label: "Bebidas",
+    imagem: "/images/categorias/bebidas.png",
     subcategorias: [
       { slug: "vinhos", label: "Vinhos" },
       { slug: "fermentados", label: "Fermentados" },
@@ -33,6 +35,7 @@ export const categorias: Categoria[] = [
   {
     slug: "vegetais-graos-oleos",
     label: "Vegetais, Grãos e Óleos diversos",
+    imagem: "/images/categorias/vegetais-graos-oleos.png",
     subcategorias: [
       { slug: "oleos-diversos", label: "Óleos" },
       { slug: "hortifruti", label: "Hortifruti" },
@@ -41,6 +44,7 @@ export const categorias: Categoria[] = [
   {
     slug: "vestuario",
     label: "Vestuário",
+    imagem: "/images/categorias/vestuario.png",
     subcategorias: [
       { slug: "la-de-alparca", label: "Lã de Alparca" },
       { slug: "sobretudo", label: "Sobretudo" },
@@ -51,10 +55,12 @@ export const categorias: Categoria[] = [
   {
     slug: "meis-de-abelhas-nativas",
     label: "Méis de Abelhas Nativas",
+    imagem: "/images/categorias/meis-de-abelhas-nativas.png",
   },
   {
     slug: "chas",
     label: "Chás",
+    imagem: "/images/categorias/chas.png",
     subcategorias: [{ slug: "cha-mate", label: "Chá Mate" }],
   },
 ];

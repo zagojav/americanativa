@@ -83,7 +83,7 @@ export function BannerCarousel({ slides }: { slides: BannerSlide[] }) {
                 src={slide.desktopSrc}
                 alt={slide.alt}
                 fill
-                sizes="100vw"
+                sizes="(max-width: 767px) 0vw, 100vw"
                 priority={indice === 0}
                 className="hidden object-cover md:block"
               />
@@ -91,7 +91,7 @@ export function BannerCarousel({ slides }: { slides: BannerSlide[] }) {
                 src={slide.mobileSrc}
                 alt={slide.alt}
                 fill
-                sizes="100vw"
+                sizes="(min-width: 768px) 0vw, 100vw"
                 priority={indice === 0}
                 className={`block md:hidden ${temRecorteMobile ? "object-cover" : "object-contain bg-creme"}`}
               />

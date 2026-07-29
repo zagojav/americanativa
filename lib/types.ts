@@ -22,5 +22,6 @@ export type Categoria = {
   slug: string;
   label: string;
   descricao?: string;
+  imagem?: string;
   subcategorias?: Subcategoria[];
 };

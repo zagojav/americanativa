@@ -62,6 +62,7 @@ export default async function Home() {
                 slug={c.slug}
                 label={c.label}
                 totalProdutos={c.totalProdutos}
+                imagem={c.imagem}
               />
             ))}
           </div>
