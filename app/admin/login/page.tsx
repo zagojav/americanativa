@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { getFirebaseAuth } from "@/lib/firebase";
 import { escreverCookieSessao } from "@/lib/adminSession";
+import { mensagemErroAuth } from "@/lib/authErrors";
+import { PasswordInput } from "@/components/PasswordInput";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -28,7 +30,7 @@ export default function AdminLoginPage() {
           "Firebase ainda não está configurado neste ambiente (variáveis NEXT_PUBLIC_FIREBASE_* em .env.local)."
         );
       } else {
-        setErro("E-mail ou senha inválidos.");
+        setErro(mensagemErroAuth(codigo) ?? "");
       }
     } finally {
       setCarregando(false);
@@ -42,8 +44,10 @@ export default function AdminLoginPage() {
       const credencial = await signInWithPopup(getFirebaseAuth(), new GoogleAuthProvider());
       escreverCookieSessao(await credencial.user.getIdToken());
       router.push("/admin");
-    } catch {
-      setErro("Não foi possível entrar com o Google.");
+    } catch (err) {
+      const codigo = (err as { code?: string })?.code ?? "";
+      const mensagem = mensagemErroAuth(codigo);
+      if (mensagem) setErro(mensagem);
     } finally {
       setCarregando(false);
     }
@@ -71,9 +75,8 @@ export default function AdminLoginPage() {
           <label className="text-sm font-medium text-vinho" htmlFor="senha">
             Senha
           </label>
-          <input
+          <PasswordInput
             required
-            type="password"
             id="senha"
             value={senha}
             onChange={(e) => setSenha(e.target.value)}

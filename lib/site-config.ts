@@ -7,7 +7,7 @@ export const siteConfig = {
   // TODO: confirmar se este é o número de WhatsApp oficial antes de publicar em produção.
   whatsappNumero: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "5511985442400",
   email: "contato@americanativa.com.br", // TODO: confirmar e-mail oficial com o cliente
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://americanativa.vercel.app",
   redesSociais: {
     instagram: "https://instagram.com/americanativa", // TODO: confirmar handle real
     facebook: "https://facebook.com/americanativa", // TODO: confirmar handle real

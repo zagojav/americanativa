@@ -12,6 +12,8 @@ import {
 } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { db, getFirebaseAuth } from "@/lib/firebase";
+import { mensagemErroAuth } from "@/lib/authErrors";
+import { PasswordInput } from "@/components/PasswordInput";
 
 /** Formata dígitos de telefone brasileiro como "XX XXXXX-XXXX" (celular,
  * 11 dígitos) ou "XX XXXX-XXXX" (fixo, 10 dígitos) enquanto o usuário digita. */
@@ -37,9 +39,13 @@ export default function EntrarPage() {
   const [etapa, setEtapa] = useState<"formulario" | "confirmar-telefone">("formulario");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
   const [telefone, setTelefone] = useState("");
   const [erro, setErro] = useState("");
   const [carregando, setCarregando] = useState(false);
+
+  const senhasDivergem =
+    modo === "criar-conta" && confirmarSenha.length > 0 && senha !== confirmarSenha;
 
   useEffect(() => {
     try {
@@ -54,6 +60,7 @@ export default function EntrarPage() {
     setErro("");
 
     if (modo === "criar-conta") {
+      if (senhasDivergem) return;
       if (!telefoneValido(telefone)) {
         setErro("Informe um telefone válido com DDD.");
         return;
@@ -65,8 +72,9 @@ export default function EntrarPage() {
     setCarregando(true);
     try {
       await signInWithEmailAndPassword(getFirebaseAuth(), email, senha);
-    } catch {
-      setErro("E-mail ou senha inválidos.");
+    } catch (err) {
+      const codigo = (err as { code?: string })?.code ?? "";
+      setErro(mensagemErroAuth(codigo) ?? "");
     } finally {
       setCarregando(false);
     }
@@ -82,8 +90,9 @@ export default function EntrarPage() {
         telefone: formatarTelefone(telefone),
         criadoEm: serverTimestamp(),
       });
-    } catch {
-      setErro("Não foi possível criar a conta. Confira o e-mail e a senha (mínimo 6 caracteres).");
+    } catch (err) {
+      const codigo = (err as { code?: string })?.code ?? "";
+      setErro(mensagemErroAuth(codigo) ?? "Erro ao processar, tenta de novo.");
       setEtapa("formulario");
     } finally {
       setCarregando(false);
@@ -99,8 +108,10 @@ export default function EntrarPage() {
     setCarregando(true);
     try {
       await signInWithPopup(getFirebaseAuth(), new GoogleAuthProvider());
-    } catch {
-      setErro("Não foi possível entrar com o Google.");
+    } catch (err) {
+      const codigo = (err as { code?: string })?.code ?? "";
+      const mensagem = mensagemErroAuth(codigo);
+      if (mensagem) setErro(mensagem);
     } finally {
       setCarregando(false);
     }
@@ -145,9 +156,8 @@ export default function EntrarPage() {
           <label className="text-sm font-medium text-vinho" htmlFor="senha">
             Senha
           </label>
-          <input
+          <PasswordInput
             required
-            type="password"
             id="senha"
             minLength={6}
             value={senha}
@@ -155,6 +165,25 @@ export default function EntrarPage() {
             className="mt-1 w-full rounded-md border border-dourado/40 px-3 py-2"
           />
         </div>
+
+        {modo === "criar-conta" && (
+          <div>
+            <label className="text-sm font-medium text-vinho" htmlFor="confirmar-senha">
+              Confirmar senha
+            </label>
+            <PasswordInput
+              required
+              id="confirmar-senha"
+              minLength={6}
+              value={confirmarSenha}
+              onChange={(e) => setConfirmarSenha(e.target.value)}
+              className="mt-1 w-full rounded-md border border-dourado/40 px-3 py-2"
+            />
+            {senhasDivergem && (
+              <p className="mt-1 text-sm text-red-700">As senhas não coincidem.</p>
+            )}
+          </div>
+        )}
 
         {modo === "criar-conta" && (
           <div>
@@ -177,7 +206,7 @@ export default function EntrarPage() {
 
         <button
           type="submit"
-          disabled={carregando}
+          disabled={carregando || senhasDivergem}
           className="w-full rounded-md bg-vinho px-6 py-3 font-medium uppercase tracking-wide text-creme transition-colors hover:bg-dourado hover:text-vinho disabled:opacity-60"
         >
           {carregando ? "Enviando..." : modo === "criar-conta" ? "Criar conta" : "Entrar"}
