@@ -22,24 +22,41 @@ export default function QuemSomosPage() {
 
         <div className="mt-8 space-y-6 text-lg leading-relaxed text-vinho/90">
           <p>
-            A América Nativa nasceu de um propósito simples: aproximar pessoas
-            dos melhores produtos da América do Sul, levando até você o que
-            cada região tem de mais autêntico.
+            A América Nativa nasceu do propósito de conectar pessoas e empresas à
+            riqueza incomparável da América do Sul, aproximando mercados, culturas e
+            oportunidades por meio de produtos que traduzem a autenticidade, a
+            tradição e a diversidade do nosso continente.
           </p>
           <p>
-            Mais do que uma loja, somos uma importadora. Selecionamos a dedo
-            desde alimentos típicos até vestuário e itens do dia a dia, trazendo
-            direto da origem produtos que carregam história, qualidade e
-            identidade.
+            Mais do que uma distribuidora, somos uma empresa especializada em
+            importação e exportação, comprometida em construir pontes entre
+            produtores, parceiros comerciais e consumidores. Atuamos com excelência
+            para transformar fronteiras em oportunidades, oferecendo soluções
+            completas em comércio exterior, logística e despacho aduaneiro, sempre
+            com agilidade, segurança e eficiência.
           </p>
           <p>
-            Trabalhamos para que o melhor do continente chegue até a sua casa ou
-            o seu negócio com confiança, seja uma compra única ou um pedido em
-            grande quantidade.
+            Cada operação é conduzida com responsabilidade, transparência e profundo
+            respeito às legislações nacionais e internacionais. Entendemos que cada
+            cliente possui necessidades únicas e, por isso, desenvolvemos soluções
+            personalizadas que agregam valor, impulsionam negócios e fortalecem
+            relações de confiança duradouras.
           </p>
           <p>
-            América Nativa é mais que comércio: é a ponte entre a riqueza da
-            América do Sul e você.
+            Nosso compromisso vai além da entrega de produtos e serviços. Acreditamos
+            em um modelo de negócios sustentável, pautado pela responsabilidade
+            ambiental, pelo desenvolvimento social e pela valorização das pessoas que
+            fazem parte de toda a cadeia de negócios.
+          </p>
+          <p>
+            Na América Nativa, cada produto transporta uma história, cada parceria
+            fortalece conexões e cada negociação representa uma oportunidade de
+            aproximar o melhor da América do Sul de novos mercados.
+          </p>
+          <p className="font-semibold">América Nativa.</p>
+          <p className="font-semibold">
+            Conectamos fronteiras, aproximamos culturas e levamos a autenticidade da
+            América do Sul para o mundo.
           </p>
         </div>
 
