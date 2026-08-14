@@ -1,36 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect } from "react";
 import { useCart } from "@/components/CartContext";
 import { formatarPreco } from "@/components/PriceTag";
+import { CartQuantityBanner } from "@/components/CartQuantityBanner";
+import { itensBloqueados } from "@/lib/cartRules";
 
 export default function CarrinhoPage() {
-  const { itens, removerItem, atualizarQuantidade, totalPreco } = useCart();
-  const [carregando, setCarregando] = useState(false);
-  const [erro, setErro] = useState<string | null>(null);
+  const { itens, removerItem, atualizarQuantidade, totalPreco, limparCarrinho } = useCart();
+  const podeContinuar = itensBloqueados(itens).length === 0;
 
-  async function finalizarCompra() {
-    setErro(null);
-    setCarregando(true);
-    try {
-      const resposta = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ itens }),
-      });
-
-      if (!resposta.ok) throw new Error("Falha ao iniciar o checkout.");
-
-      const { initPoint } = await resposta.json();
-      window.location.href = initPoint;
-    } catch {
-      setErro(
-        "Não foi possível iniciar o pagamento. Verifique se as credenciais do Mercado Pago já foram configuradas."
-      );
-      setCarregando(false);
+  // Retorno do Checkout Pro (fluxo de boleto) após pagamento concluído —
+  // sem isso o carrinho nunca era esvaziado depois de uma compra por boleto.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("status") === "sucesso") {
+      limparCarrinho();
     }
-  }
+  }, [limparCarrinho]);
 
   if (itens.length === 0) {
     return (
@@ -94,16 +81,18 @@ export default function CarrinhoPage() {
         <span className="font-display text-xl text-vinho">{formatarPreco(totalPreco)}</span>
       </div>
 
-      {erro && <p className="mt-4 text-sm text-red-700">{erro}</p>}
+      <div className="mt-6">
+        <CartQuantityBanner itens={itens} />
+      </div>
 
-      <button
-        type="button"
-        onClick={finalizarCompra}
-        disabled={carregando}
-        className="mt-6 w-full rounded-md bg-vinho px-6 py-3 font-medium uppercase tracking-wide text-creme transition-colors hover:bg-dourado hover:text-vinho disabled:opacity-60"
-      >
-        {carregando ? "Redirecionando..." : "Finalizar compra"}
-      </button>
+      {podeContinuar && (
+        <Link
+          href="/checkout"
+          className="mt-6 block w-full rounded-md bg-vinho px-6 py-3 text-center font-medium uppercase tracking-wide text-creme transition-colors hover:bg-dourado hover:text-vinho"
+        >
+          Finalizar compra
+        </Link>
+      )}
     </div>
   );
 }

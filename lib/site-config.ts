@@ -13,6 +13,11 @@ export const siteConfig = {
     facebook: "https://facebook.com/americanativa", // TODO: confirmar handle real
   },
   atacado: {
+    // A partir daqui (inclusive) mostramos aviso de condições especiais,
+    // sem bloquear a compra — ver lib/cartRules.ts.
+    quantidadeAviso: 450,
+    // Acima disto (exclusive) o avanço no checkout é bloqueado e o cliente
+    // é direcionado para orçamento via WhatsApp.
     quantidadeMinima: 500,
   },
 } as const;
