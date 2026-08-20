@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-// Único e-mail autorizado a usar o painel admin (mesmo valor de
+// E-mails autorizados a usar o painel admin (mesma lista de
 // app/admin/layout.tsx — mantidos em sincronia manualmente, já que um
 // arquivo roda no servidor e o outro no cliente).
-const EMAIL_ADMIN_AUTORIZADO = "guilherme.rezendezago@gmail.com";
+const EMAILS_ADMIN_AUTORIZADOS = ["guilherme.rezendezago@gmail.com", "americanativa7@gmail.com"];
 
 /**
  * Barreira de servidor pra /admin/*: sem isso, qualquer um que digite a URL
@@ -49,7 +49,7 @@ export async function proxy(request: NextRequest) {
 
     const dados = await resposta.json();
     const email: string | undefined = dados.users?.[0]?.email;
-    if (email !== EMAIL_ADMIN_AUTORIZADO) {
+    if (!email || !EMAILS_ADMIN_AUTORIZADOS.includes(email)) {
       return NextResponse.redirect(new URL("/admin/login", request.url));
     }
   } catch {

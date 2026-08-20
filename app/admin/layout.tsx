@@ -7,10 +7,12 @@ import { onIdTokenChanged, signOut, type User } from "firebase/auth";
 import { getFirebaseAuth } from "@/lib/firebase";
 import { escreverCookieSessao, limparCookieSessao } from "@/lib/adminSession";
 
-// Único e-mail autorizado a usar o painel admin (o Firebase Auth do projeto
-// só deve ter esse usuário criado no console, mas checamos aqui também por
-// segurança extra caso outro usuário seja criado por engano).
-const EMAIL_ADMIN_AUTORIZADO = "guilherme.rezendezago@gmail.com";
+// E-mails autorizados a usar o painel admin (o Firebase Auth do projeto só
+// deve ter esses usuários criados no console, mas checamos aqui também por
+// segurança extra caso outro usuário seja criado por engano). Mesma lista de
+// proxy.ts — mantidas em sincronia manualmente, já que um arquivo roda no
+// servidor e o outro no cliente.
+const EMAILS_ADMIN_AUTORIZADOS = ["guilherme.rezendezago@gmail.com", "americanativa7@gmail.com"];
 
 const linksAdmin = [
   { href: "/admin", label: "Pedidos" },
@@ -34,7 +36,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       const unsubscribe = onIdTokenChanged(
         getFirebaseAuth(),
         async (user) => {
-          if (user && user.email !== EMAIL_ADMIN_AUTORIZADO) {
+          if (user && !EMAILS_ADMIN_AUTORIZADOS.includes(user.email ?? "")) {
             setNaoAutorizado(true);
             limparCookieSessao();
             await signOut(getFirebaseAuth());

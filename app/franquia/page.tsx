@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { FranquiaForm } from "@/components/FranquiaForm";
-import { PlaceholderImage } from "@/components/PlaceholderImage";
+import { Logo } from "@/components/Logo";
 
 export const metadata: Metadata = {
   title: "Franquia",
@@ -18,19 +18,10 @@ export default function FranquiaPage() {
             está expandindo por meio de franquias e pontos de venda. Junte-se
             a nós.
           </p>
-
-          {/* Texto final e condições comerciais ainda dependem de informação
-              do cliente — conteúdo abaixo é provisório. */}
-          <div className="mt-6 rounded-md border border-dourado/40 bg-white p-4 text-sm text-vinho/70">
-            <p className="font-medium text-vinho">Conteúdo provisório</p>
-            <p className="mt-1">
-              Investimento inicial, condições comerciais, suporte oferecido e
-              modelo de royalties ainda serão confirmados com o cliente antes
-              da publicação definitiva desta página.
-            </p>
-          </div>
         </div>
-        <PlaceholderImage label="ponto de venda / franquia" className="aspect-[4/3] w-full rounded-lg" />
+        <div className="flex aspect-[4/3] w-full items-center justify-center rounded-lg border border-dourado/30 bg-vinho/5">
+          <Logo className="h-32 w-32" />
+        </div>
       </div>
 
       <div className="mt-16 max-w-xl">
